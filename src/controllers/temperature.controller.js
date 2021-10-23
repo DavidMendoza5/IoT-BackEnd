@@ -18,6 +18,15 @@ const getTemperature = async (req, res, next) => {
   }
 }
 
+const getTemperatureFromDb = async (req, res, next) => {
+  try {
+    let data = await TemperatureSchema.find()
+    res.status(200).send(data)
+  } catch(err) {
+    res.status(500).send(err.message)
+  }
+}
+
 const activateRele = async (req, res, next) => {
   try {
     const response = await axios.post(config.raspberry_host+'rele', req.body)
@@ -29,5 +38,6 @@ const activateRele = async (req, res, next) => {
 
 module.exports = {
   getTemperature,
+  getTemperatureFromDb,
   activateRele
 }
