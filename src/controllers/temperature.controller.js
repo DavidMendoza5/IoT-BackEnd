@@ -2,8 +2,6 @@ const axios = require('axios')
 const TemperatureSchema = require('../schema/temperature.schema')
 const config = require('../config/config')
 
-require('dotenv').config()
-
 const getTemperature = async (req, res, next) => {
   try {
     let temperature = await axios.get(config.raspberry_host)
