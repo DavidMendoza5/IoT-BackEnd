@@ -1,16 +1,9 @@
-const axios = require('axios')
-const TemperatureSchema = require('../schema/temperature.schema')
-const config = require('../config/config')
+const temperatureService = require('../services/temperature.service')
 
 const getTemperature = async (req, res, next) => {
   try {
-    let temperature = await axios.get(config.raspberry_host)
-
-    data = new TemperatureSchema(temperature.data)
-
-    await data.save()
-    
-    res.status(200).send(temperature.data)
+    let data = await temperatureService.getTemperatureService()
+    res.status(200).send({data, message: 'Data saved'})
   } catch(err) {
     res.status(500).send(err.message)
   }
@@ -18,7 +11,7 @@ const getTemperature = async (req, res, next) => {
 
 const getTemperatureFromDb = async (req, res, next) => {
   try {
-    let data = await TemperatureSchema.find()
+    let data = await temperatureService.getTemperatureFromDbService()
     res.status(200).send(data)
   } catch(err) {
     res.status(500).send(err.message)
@@ -27,8 +20,8 @@ const getTemperatureFromDb = async (req, res, next) => {
 
 const activateRele = async (req, res, next) => {
   try {
-    const response = await axios.post(config.raspberry_host+'rele', req.body)
-    res.status(200).send(response.data)
+    const response = await temperatureService.activateReleService(req.body)
+    res.status(200).send(response)
   } catch (error) {
     res.status(500).send(error.message)
   }
