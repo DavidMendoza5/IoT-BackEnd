@@ -1,15 +1,16 @@
-const mongoose = require('mongoose')
-
 const app = require('./app')
 const config = require('./config/config')
+const mongooseLoader = require('./loaders/mongoose.loader')
 
-mongoose.connect(config.connection, { useNewUrlParser:true, useUnifiedTopology: true}, (err, res) => {
-  if(err) {
-    throw err
-  } else {
-    console.log('Mongo connected')
+async function startServer() {
+  try {
+    await mongooseLoader()
     app.listen(config.port, () => {
-        console.log(`Running on http://localhost:${config.port}`)
+      console.log(`Running on http://localhost:${config.port}`)
     })
+  } catch(err) {
+    console.log(err)
   }
-})
+}
+
+startServer()
